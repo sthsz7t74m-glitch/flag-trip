@@ -208,6 +208,7 @@
   let learnView = "gallery";
   let visibleLearnCountries = [];
   let flashcardIndex = 0;
+  let clearAnswerHover = null;
 
   const stats = loadStats();
 
@@ -442,6 +443,7 @@
     const country = quiz.questions[quiz.index];
     quiz.answered = false;
     quiz.startedAt = performance.now();
+    resetQuestionInteraction();
     elements.feedbackCard.hidden = true;
     elements.feedbackCard.classList.remove("is-wrong");
 
@@ -462,6 +464,28 @@
     }
     bindFlagFallbacks(elements.questionVisual);
     bindFlagFallbacks(elements.answerArea);
+  }
+
+  function resetQuestionInteraction() {
+    const activeElement = document.activeElement;
+    if (activeElement && elements.answerArea.contains(activeElement) && typeof activeElement.blur === "function") {
+      activeElement.blur();
+    }
+
+    elements.answerArea.querySelectorAll("[data-answer-code]").forEach((button) => {
+      button.disabled = false;
+      button.classList.remove("is-correct", "is-wrong");
+      button.removeAttribute("aria-pressed");
+    });
+    elements.answerArea.replaceChildren();
+
+    if (clearAnswerHover) window.removeEventListener("pointermove", clearAnswerHover);
+    elements.answerArea.classList.add("is-hover-reset");
+    clearAnswerHover = () => {
+      elements.answerArea.classList.remove("is-hover-reset");
+      clearAnswerHover = null;
+    };
+    window.addEventListener("pointermove", clearAnswerHover, { once: true });
   }
 
   function renderFlagToNameQuestion(country) {
@@ -529,6 +553,7 @@
           if (candidate.dataset.answerCode === country.code) candidate.classList.add("is-correct");
         });
         const correct = selectedCode === country.code;
+        button.setAttribute("aria-pressed", "true");
         if (!correct) button.classList.add("is-wrong");
         submitAnswer(correct, selectedCode);
       });
@@ -616,7 +641,7 @@
     elements.reviewList.innerHTML = quiz.answers.map((answer) => `
       <div class="review-item ${answer.correct ? "" : "is-wrong"}">
         <div class="review-flag">${flagImageContent(answer.country)}</div>
-        <div><strong>${escapeHtml(countryName(answer.country))}</strong><small>${escapeHtml(capitalName(answer.country))}</small></div>
+        <div class="review-copy"><strong>${escapeHtml(countryName(answer.country))}</strong><small>${escapeHtml(capitalName(answer.country))}</small></div>
         <span class="review-result-icon">${answer.correct ? "✓" : "×"}</span>
       </div>
     `).join("");

@@ -1032,11 +1032,13 @@ legend,
   transition: 0.18s ease;
 }
 
-.answer-button:hover,
-.answer-flag:hover {
-  border-color: var(--blue);
-  background: var(--blue-soft);
-  transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+  .answer-area:not(.is-hover-reset) .answer-button:hover,
+  .answer-area:not(.is-hover-reset) .answer-flag:hover {
+    border-color: var(--blue);
+    background: var(--blue-soft);
+    transform: translateY(-2px);
+  }
 }
 
 .answer-button.is-correct,
@@ -1336,7 +1338,14 @@ legend,
   font-size: 12px;
 }
 
+.review-copy {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+
 .review-item small {
+  display: block;
   color: var(--muted);
   font-size: 10px;
 }
