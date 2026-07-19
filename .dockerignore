@@ -1,0 +1,7 @@
+.git
+.github
+target
+*.zip
+README.md
+tests
+scripts
