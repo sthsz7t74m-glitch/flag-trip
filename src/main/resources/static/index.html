@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#176bff">
+  <meta name="description" content="世界の国旗を遊びながら覚えるクイズゲーム FLAG TRIP">
+  <title>FLAG TRIP | 世界の国旗クイズ</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script defer src="/js/game-utils.js"></script>
+  <script defer src="/js/app.js"></script>
+</head>
+<body>
+  <div class="background-shape background-shape--one" aria-hidden="true"></div>
+  <div class="background-shape background-shape--two" aria-hidden="true"></div>
+
+  <header class="app-header">
+    <button class="brand" id="brand-button" type="button" aria-label="ホームへ戻る">
+      <span class="brand__mark" aria-hidden="true">✈</span>
+      <span class="brand__text">FLAG <strong>TRIP</strong></span>
+    </button>
+
+    <div class="header-actions">
+      <div class="language-switch" role="group" aria-label="言語切り替え">
+        <button class="language-switch__button is-active" data-language="ja" type="button">日本語</button>
+        <button class="language-switch__button" data-language="en" type="button">EN</button>
+      </div>
+      <button class="icon-button" id="sound-toggle" type="button" aria-label="音を切り替える" title="音を切り替える">
+        <span id="sound-icon" aria-hidden="true">🔊</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <section class="screen is-active" id="home-screen" aria-labelledby="home-title">
+      <div class="hero panel">
+        <div class="hero__copy">
+          <p class="eyebrow">PLAY・LEARN・TRAVEL</p>
+          <h1 id="home-title"><span>FLAG</span> TRIP</h1>
+          <p class="hero__lead" data-i18n="heroLead">国旗を覚えて、世界をめぐろう！</p>
+          <div class="hero__stats" aria-label="学習記録">
+            <div class="mini-stat">
+              <span class="mini-stat__icon" aria-hidden="true">🎯</span>
+              <span><strong id="home-accuracy">--%</strong><small data-i18n="accuracy">正答率</small></span>
+            </div>
+            <div class="mini-stat">
+              <span class="mini-stat__icon" aria-hidden="true">🔥</span>
+              <span><strong id="home-streak">0</strong><small data-i18n="bestStreak">最高連続正解</small></span>
+            </div>
+            <div class="mini-stat">
+              <span class="mini-stat__icon" aria-hidden="true">🧳</span>
+              <span><strong id="home-learned">0 / 195</strong><small data-i18n="learnedCountries">学習した国</small></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero__visual" aria-hidden="true">
+          <div class="orbit orbit--outer"></div>
+          <div class="orbit orbit--inner"></div>
+          <div class="plane">✈</div>
+          <svg class="globe" viewBox="0 0 260 260" role="img" aria-label="地球儀">
+            <defs>
+              <linearGradient id="ocean" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#52d7ff"/>
+                <stop offset="1" stop-color="#176bff"/>
+              </linearGradient>
+              <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#0751bc" flood-opacity=".28"/>
+              </filter>
+            </defs>
+            <circle cx="130" cy="130" r="104" fill="url(#ocean)" filter="url(#shadow)"/>
+            <g fill="none" stroke="#c7f4ff" stroke-width="3" opacity=".5">
+              <ellipse cx="130" cy="130" rx="51" ry="104"/>
+              <ellipse cx="130" cy="130" rx="88" ry="104"/>
+              <path d="M31 100h198M27 135h206M40 175h180"/>
+            </g>
+            <g fill="#8bea92" stroke="#44bd6d" stroke-width="3" stroke-linejoin="round">
+              <path d="M58 74l20-18 31 2 12 19-15 11-4 21-17 9-17-14-20-5z"/>
+              <path d="M92 127l24 7 9 21-8 35-13 18-12-25-15-16 3-25z"/>
+              <path d="M145 57l34 1 29 21-6 17-26 3-9 13-24-8-8-19z"/>
+              <path d="M147 117l27-5 25 16-8 19-18 1-10 32-17-10-8-34z"/>
+              <path d="M188 180l24 4 10 15-18 15-24-10z"/>
+            </g>
+            <circle cx="91" cy="82" r="7" fill="#fff" opacity=".65"/>
+          </svg>
+          <div class="floating-badge floating-badge--one">🇯🇵</div>
+          <div class="floating-badge floating-badge--two">🇧🇷</div>
+          <div class="floating-badge floating-badge--three">🇫🇷</div>
+        </div>
+      </div>
+
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow" data-i18n="chooseCourse">コースを選ぶ</p>
+          <h2 data-i18n="whereNext">次はどこへ行く？</h2>
+        </div>
+        <span class="section-heading__note" data-i18n="allModesFree">すべて無料で遊べます</span>
+      </div>
+
+      <div class="mode-grid">
+        <button class="mode-card mode-card--blue" data-mode="flag-to-name" type="button">
+          <span class="mode-card__stamp">01</span>
+          <span class="mode-card__icon" aria-hidden="true">🏳️</span>
+          <span class="mode-card__body">
+            <strong data-i18n="flagToName">国旗 → 国名</strong>
+            <small data-i18n="flagToNameDesc">国旗を見て4択から国名を選ぼう</small>
+          </span>
+          <span class="mode-card__arrow" aria-hidden="true">→</span>
+        </button>
+
+        <button class="mode-card mode-card--pink" data-mode="name-to-flag" type="button">
+          <span class="mode-card__stamp">02</span>
+          <span class="mode-card__icon" aria-hidden="true">🔍</span>
+          <span class="mode-card__body">
+            <strong data-i18n="nameToFlag">国名 → 国旗</strong>
+            <small data-i18n="nameToFlagDesc">国名に合う国旗を4枚から探そう</small>
+          </span>
+          <span class="mode-card__arrow" aria-hidden="true">→</span>
+        </button>
+
+        <button class="mode-card mode-card--orange" data-mode="typing" type="button">
+          <span class="mode-card__stamp">03</span>
+          <span class="mode-card__icon" aria-hidden="true">⌨️</span>
+          <span class="mode-card__body">
+            <strong data-i18n="typingQuiz">国名入力</strong>
+            <small data-i18n="typingQuizDesc">ヒントなしで国名を入力する上級コース</small>
+          </span>
+          <span class="mode-card__arrow" aria-hidden="true">→</span>
+        </button>
+
+        <button class="mode-card mode-card--green" id="learn-mode-button" type="button">
+          <span class="mode-card__stamp">04</span>
+          <span class="mode-card__icon" aria-hidden="true">📚</span>
+          <span class="mode-card__body">
+            <strong data-i18n="learnMode">学習モード</strong>
+            <small data-i18n="learnModeDesc">図鑑とカードで195か国をじっくり学習</small>
+          </span>
+          <span class="mode-card__arrow" aria-hidden="true">→</span>
+        </button>
+      </div>
+
+      <div class="home-footer-card panel">
+        <span class="home-footer-card__icon" aria-hidden="true">💡</span>
+        <div>
+          <strong data-i18n="todayTip">今日の旅メモ</strong>
+          <p id="travel-tip">間違えた国は自動で記録され、次の復習に役立ちます。</p>
+        </div>
+        <button class="text-button" id="weak-review-button" type="button" data-i18n="reviewWeak">苦手を復習</button>
+      </div>
+    </section>
+
+    <section class="screen" id="setup-screen" aria-labelledby="setup-title">
+      <button class="back-button" data-back-home type="button">← <span data-i18n="backHome">ホームへ</span></button>
+      <div class="setup-card panel">
+        <div class="setup-card__header">
+          <span class="ticket-chip" data-i18n="boardingPass">BOARDING PASS</span>
+          <h2 id="setup-title">国旗 → 国名</h2>
+          <p data-i18n="chooseTripSettings">旅のコースを設定しよう</p>
+        </div>
+
+        <form id="quiz-setup-form">
+          <fieldset>
+            <legend data-i18n="difficulty">難易度</legend>
+            <div class="choice-row choice-row--three">
+              <label class="select-card">
+                <input type="radio" name="difficulty" value="easy" checked>
+                <span class="select-card__emoji">🌱</span>
+                <strong data-i18n="beginner">初級</strong>
+                <small data-i18n="beginnerDesc">有名な41か国</small>
+              </label>
+              <label class="select-card">
+                <input type="radio" name="difficulty" value="medium">
+                <span class="select-card__emoji">🗺️</span>
+                <strong data-i18n="intermediate">中級</strong>
+                <small data-i18n="intermediateDesc">初級＋64か国</small>
+              </label>
+              <label class="select-card">
+                <input type="radio" name="difficulty" value="hard">
+                <span class="select-card__emoji">🚀</span>
+                <strong data-i18n="advanced">上級</strong>
+                <small data-i18n="advancedDesc">世界195か国</small>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="form-grid">
+            <label class="field-label">
+              <span data-i18n="region">地域</span>
+              <select id="region-select" name="region">
+                <option value="all" data-i18n="allWorld">世界すべて</option>
+                <option value="Asia" data-i18n="asia">アジア</option>
+                <option value="Europe" data-i18n="europe">ヨーロッパ</option>
+                <option value="Africa" data-i18n="africa">アフリカ</option>
+                <option value="Americas" data-i18n="americas">南北アメリカ</option>
+                <option value="Oceania" data-i18n="oceania">オセアニア</option>
+              </select>
+            </label>
+            <label class="field-label">
+              <span data-i18n="questions">問題数</span>
+              <select id="question-count-select" name="questionCount">
+                <option value="10">10問</option>
+                <option value="20">20問</option>
+                <option value="30">30問</option>
+              </select>
+            </label>
+          </div>
+
+          <fieldset>
+            <legend data-i18n="explanationTiming">解説のタイミング</legend>
+            <div class="segmented-choice">
+              <label>
+                <input type="radio" name="explanation" value="immediate" checked>
+                <span data-i18n="explainNow">1問ごとに解説</span>
+              </label>
+              <label>
+                <input type="radio" name="explanation" value="summary">
+                <span data-i18n="explainLater">最後にまとめて解説</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <button class="primary-button primary-button--wide" type="submit">
+            <span data-i18n="depart">出発する</span><span aria-hidden="true">✈</span>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <section class="screen" id="quiz-screen" aria-labelledby="quiz-prompt">
+      <div class="quiz-topbar">
+        <button class="back-button" id="quit-quiz-button" type="button">× <span data-i18n="quit">やめる</span></button>
+        <div class="quiz-progress" aria-label="クイズ進捗">
+          <div class="quiz-progress__labels">
+            <strong><span id="question-number">1</span> / <span id="question-total">10</span></strong>
+            <span id="progress-percent">10%</span>
+          </div>
+          <div class="progress-track"><span id="progress-bar"></span></div>
+        </div>
+        <div class="score-pill"><span data-i18n="score">SCORE</span><strong id="current-score">0</strong></div>
+      </div>
+
+      <div class="quiz-layout">
+        <aside class="combo-card panel">
+          <span class="combo-card__fire" aria-hidden="true">🔥</span>
+          <strong id="combo-count">0</strong>
+          <span data-i18n="combo">COMBO</span>
+          <small id="speed-message" data-i18n="speedHint">早く答えるとボーナス！</small>
+        </aside>
+
+        <div class="question-card panel">
+          <p class="eyebrow" id="question-kind">FLAG QUIZ</p>
+          <h2 id="quiz-prompt">この国旗はどこの国？</h2>
+          <div id="question-visual" class="question-visual"></div>
+          <div id="answer-area" class="answer-area"></div>
+
+          <div class="feedback-card" id="feedback-card" hidden aria-live="polite">
+            <div class="feedback-card__result">
+              <span id="feedback-icon" aria-hidden="true">🎉</span>
+              <div>
+                <strong id="feedback-title">正解！</strong>
+                <p id="feedback-answer"></p>
+              </div>
+              <span class="points-badge" id="points-earned">+0</span>
+            </div>
+            <div class="feedback-card__facts" id="feedback-facts"></div>
+            <button class="primary-button" id="next-question-button" type="button">
+              <span data-i18n="nextQuestion">次の問題へ</span> →
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="result-screen" aria-labelledby="result-title">
+      <div class="result-card panel">
+        <div class="result-burst" aria-hidden="true">🏆</div>
+        <p class="eyebrow" data-i18n="arrival">ARRIVAL!</p>
+        <h2 id="result-title" data-i18n="tripComplete">旅を完走しました！</h2>
+        <p id="result-message" class="result-message"></p>
+
+        <div class="result-score">
+          <small data-i18n="finalScore">FINAL SCORE</small>
+          <strong id="result-score-value">0</strong>
+          <span id="new-record-badge" hidden data-i18n="newRecord">NEW RECORD!</span>
+        </div>
+
+        <div class="result-stats">
+          <div><strong id="result-correct">0 / 10</strong><span data-i18n="correctAnswers">正解数</span></div>
+          <div><strong id="result-accuracy">0%</strong><span data-i18n="accuracy">正答率</span></div>
+          <div><strong id="result-streak">0</strong><span data-i18n="bestCombo">最大コンボ</span></div>
+        </div>
+
+        <div class="review-section" id="review-section">
+          <h3 data-i18n="answerReview">答えを振り返る</h3>
+          <div class="review-list" id="review-list"></div>
+        </div>
+
+        <div class="result-actions">
+          <button class="secondary-button" id="result-home-button" type="button" data-i18n="backHome">ホームへ</button>
+          <button class="primary-button" id="retry-button" type="button"><span data-i18n="retry">もう一度</span> ↻</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="learn-screen" aria-labelledby="learn-title">
+      <button class="back-button" data-back-home type="button">← <span data-i18n="backHome">ホームへ</span></button>
+      <div class="learn-header">
+        <div>
+          <p class="eyebrow" data-i18n="worldPassport">WORLD PASSPORT</p>
+          <h2 id="learn-title" data-i18n="flagEncyclopedia">世界の国旗図鑑</h2>
+          <p data-i18n="learnHeaderDesc">気になる国を選んで、国旗と基本情報を覚えよう。</p>
+        </div>
+        <div class="learned-counter">
+          <span aria-hidden="true">🛂</span>
+          <strong id="learned-counter-value">0</strong>
+          <small>/ 195 <span data-i18n="countriesVisited">か国訪問</span></small>
+        </div>
+      </div>
+
+      <div class="learn-toolbar panel">
+        <label class="search-field">
+          <span aria-hidden="true">🔎</span>
+          <input id="country-search" type="search" placeholder="国名・首都で検索" autocomplete="off">
+        </label>
+        <select id="learn-region-select" aria-label="地域で絞り込む">
+          <option value="all" data-i18n="allWorld">世界すべて</option>
+          <option value="Asia" data-i18n="asia">アジア</option>
+          <option value="Europe" data-i18n="europe">ヨーロッパ</option>
+          <option value="Africa" data-i18n="africa">アフリカ</option>
+          <option value="Americas" data-i18n="americas">南北アメリカ</option>
+          <option value="Oceania" data-i18n="oceania">オセアニア</option>
+        </select>
+        <div class="view-switch" role="group" aria-label="表示形式">
+          <button class="is-active" data-learn-view="gallery" type="button" data-i18n="gallery">図鑑</button>
+          <button data-learn-view="cards" type="button" data-i18n="flashcards">カード</button>
+        </div>
+      </div>
+
+      <div id="country-grid" class="country-grid"></div>
+
+      <div id="flashcard-area" class="flashcard-area" hidden>
+        <div class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="カードを裏返す">
+          <div class="flashcard__inner">
+            <div class="flashcard__face flashcard__front" id="flashcard-front"></div>
+            <div class="flashcard__face flashcard__back" id="flashcard-back"></div>
+          </div>
+        </div>
+        <p class="flashcard-hint" data-i18n="tapToFlip">カードを押すと答えが見えます</p>
+        <div class="flashcard-controls">
+          <button class="secondary-button" id="previous-card-button" type="button">← <span data-i18n="previous">前へ</span></button>
+          <span id="flashcard-position">1 / 195</span>
+          <button class="primary-button" id="known-card-button" type="button"><span data-i18n="remembered">覚えた！</span> ✓</button>
+          <button class="secondary-button" id="next-card-button" type="button"><span data-i18n="next">次へ</span> →</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="country-dialog" class="country-dialog">
+    <button class="dialog-close" id="dialog-close-button" type="button" aria-label="閉じる">×</button>
+    <div id="dialog-content"></div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="confetti-layer" class="confetti-layer" aria-hidden="true"></div>
+</body>
+</html>
